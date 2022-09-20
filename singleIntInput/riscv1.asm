@@ -10,14 +10,15 @@ MAIN:		li a7, 4						# Print service
 		
 		li a7, 5						# Integer input service
 		ecall
-		mv t0, a0						# Store integer in t0
+		la t0, A						# Load A address in t0
+		sw a0, 0(t0)
 		
 		li a7, 4						# Print output
 		la a0, OUTPUT_STR
 		ecall
 		
 		li a7, 1						#Print integer service
-		addi a0, t0, 0
+		lw a0, A
 		ecall
 		
 		li a7, 4						# Print endline character
