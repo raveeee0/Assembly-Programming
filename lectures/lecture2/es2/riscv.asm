@@ -1,5 +1,5 @@
 .data
-V:	.space 40
+V:	.space 80
 PTR: 	.dword 0
 
 .text
@@ -10,44 +10,38 @@ MAIN: 	addi a2, zero, 5	# Load 5 as parameter
 	li a7, 10		# Exit
 	ecall
 	
-FOO:	addi sp, sp, -12	# Save ra in actiovation record
-	sd ra, 4(sp)		# Leave space for counter variable
+FOO:	addi sp, sp, -8		# Save ra in activation record
+	sd s0, 0(sp)		# Leave space for counter variable
 	
 	la t0, V		# I use temp because it is not a local variable
 	la t1, PTR		# Load PTR
-	
 	sd t0, 0(t1)		# Store the pointer to the first array element to PTR
 				
-				# Counter variable I is in the stack
-	sw zero, 0(sp)		# Initialize to 0
+	li s0, 0		# Initialize counter variable I to 0
+	li t2, 10		# Limit
 	
-FOR:	lw t1, 0(sp)		# Check if condition is valid
-	
-	li t2, 10
-	bge t1, t2, END_LOOP
+FOR:	bge s0, t2, END_LOOP
 
-THEN:	la t0, PTR		# Add n to element pointed by PTR
-	ld t1, 0(t0)
-	lw t2, 0(t1)
+	ld t0, 0(t1)		# Load pointer P in $t0
+	ld t1, 0(t0) 		# Load *p, p pointed value
+
+	add t1, t1, a2		# Sum n
+	sd t1, 0(t0)		# Save *p
 	
-	add t2, t2, a2
-	sw t0, 0(t2)
+	addi t0, t0, 8 		# p++, point to next element
 	
+	la t1, PTR
+	sd t0, 0(t1)		# Save new p
 	
-	la t0, PTR		# p++
-	ld t1, 0(t0)
-	addi t1, t1, 4
-	sd t1, 0(t0)
+	addi s0, s0, 1		# i++
 	
-	
-	lw t1, 0(sp)		# i++
-	addi t1, t1, 0
-	sw t1, 0(sp)
-	
+	j FOR
 	
 END_LOOP:
-	ld ra, 4(sp)
-	jalr zero, 0(ra)
+	ld s0, 0(sp)		# Restore s0
+	addi sp, sp, 8		# Free memory
+	
+	jalr zero, 0(ra)	# Return
 	
 	
 	
