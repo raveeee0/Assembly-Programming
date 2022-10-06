@@ -22,6 +22,7 @@ FOO:	addi sp, sp, -8		# Save ra in activation record
 	
 FOR:	bge s0, t2, END_LOOP
 
+	la t1, PTR		# Load in t1 the address of P
 	ld t0, 0(t1)		# Load pointer P in $t0
 	ld t1, 0(t0) 		# Load *p, p pointed value
 
