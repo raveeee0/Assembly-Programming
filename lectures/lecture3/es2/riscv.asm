@@ -31,7 +31,7 @@ MAIN:	li s0, 1		# Initialize the six values
 BIG_FUN:
 	addi sp, sp, -16	# Save frame pointer and return address
 	
-	sd fp, 0(sp)		# Save old fp
+	sd fp, 8(sp)		# Save old fp
 	
 	addi fp, sp, 8		# Now fp points to the beginning of the activation record of BIG_FUN
 	sd ra, 0(sp)		# Save return address
@@ -70,15 +70,17 @@ BIG_FUN:
 	jr ra
 	
 SUMS:
-	addi sp, sp, 8 
-	sd fp, 0(sp) 
-	mv fp, sp 
+	addi sp, sp, 8 		# Allocate space
+	sd fp, 0(sp) 		# Save frame pointer
+	mv fp, sp 		# Move frame pointer to beginning of SUMS activation record
 	
-	mul t0, a0, a1
+	mul t0, a0, a1		# Calculations
 	addi a0, t0, 17
-	addi sp, fp, 8 
-	ld fp, 0(fp) 
-	jr ra
+	
+	addi sp, fp, 8		# Deallocate space 
+	ld fp, 0(fp) 		# Recover old fp
+	
+	jr ra			# Return
 	
 	
 	
