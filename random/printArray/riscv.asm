@@ -15,8 +15,8 @@ MAIN:	la a2, VECT
 	
 PRINT_ARR:
 	addi sp, sp, -16	# Record frame
-	ld ra, 8(sp)
-	ld s0, 0(sp)
+	sd ra, 8(sp)
+	sd s0, 0(sp)
 	
 	li s0, 0
 	
