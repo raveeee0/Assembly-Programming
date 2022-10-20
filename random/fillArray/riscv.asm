@@ -1,4 +1,4 @@
-.eqv N 10
+.eqv N 5
 
 .data
 VECTOR: .space	80			# Space for 10 long elements
@@ -7,6 +7,10 @@ VECTOR: .space	80			# Space for 10 long elements
 .global MAIN
 MAIN:	li a2, 9
 	jal ra, FILL_ARR		# Call Fill Array function
+	
+	li a7, 93
+	li a0, 0
+	ecall
 	
 FILL_ARR:
 	addi sp, sp, -16		# Allocate space on the stack
